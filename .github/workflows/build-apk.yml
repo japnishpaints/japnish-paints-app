@@ -1,0 +1,68 @@
+name: Build Japnish Paints APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Prepare web app
+        run: |
+          rm -rf www
+          mkdir -p www
+          cp app.js config.js index.html style.css manifest.json app-update.js www/
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("www/config.js")
+          s = p.read_text()
+
+          s = s.replace(
+              'UPDATE_VERSION_URL: "/mobile/app-version.php"',
+              'UPDATE_VERSION_URL: "https://japnishpaints.store/mobile/app-version.php"'
+          )
+
+          s = s.replace(
+              'APK_DOWNLOAD_URL: "/mobile/app/JapnishPaints.apk"',
+              'APK_DOWNLOAD_URL: "https://japnishpaints.store/mobile/app/JapnishPaints.apk"'
+          )
+
+          p.write_text(s)
+          PY
+
+      - name: Install Capacitor
+        run: npm install
+
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Sync Android project
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon
+
+      - name: Prepare APK
+        run: |
+          mkdir -p release
+          cp android/app/build/outputs/apk/debug/app-debug.apk release/JapnishPaints-v68.0.0-debug.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JapnishPaints-APK
+          path: release/JapnishPaints-v68.0.0-debug.apk
