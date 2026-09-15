@@ -1,0 +1,11 @@
+{
+  "name": "Japnish Paints — Premium Partner App",
+  "short_name": "Japnish Paints",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b1730",
+  "theme_color": "#0b1730",
+  "icons": []
+}
