@@ -16,30 +16,45 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Prepare web app
         run: |
           rm -rf www
           mkdir -p www
-          cp app.js config.js index.html style.css manifest.json app-update.js www/
+          cp app.js config.js index.html style.css manifest.json app-update.js dashboard-brand-fix.css japnish-dashboard-logo.png www/
           python3 - <<'PY'
           from pathlib import Path
           p=Path("www/config.js")
           s=p.read_text()
+          s=s.replace('API_BASE_URL: "/api"', 'API_BASE_URL: "https://japnishpaints.store/api"')
+          s=s.replace('DATA_API_BASE_URL: "/mobile/mobile-api.php"', 'DATA_API_BASE_URL: "https://japnishpaints.store/mobile/mobile-api.php"')
           s=s.replace('UPDATE_VERSION_URL: "/mobile/app-version.php"', 'UPDATE_VERSION_URL: "https://japnishpaints.store/mobile/app-version.php"')
           s=s.replace('APK_DOWNLOAD_URL: "/mobile/app/JapnishPaints.apk"', 'APK_DOWNLOAD_URL: "https://japnishpaints.store/mobile/app/JapnishPaints.apk"')
+          s=s.replace('68.0.1', '68.0.2')
+          s=s.replace('68.0.0', '68.0.2')
           p.write_text(s)
+
+          # UI-only dashboard logo: the horizontal supplied brand logo is used
+          # in dashboard/header/menu without touching backend logic.
+          idx=Path("www/index.html")
+          h=idx.read_text()
+          if 'dashboard-brand-fix.css' not in h:
+              h=h.replace('</head>', '<link rel="stylesheet" href="dashboard-brand-fix.css?v=68.0.2"></head>')
+          idx.write_text(h)
           PY
 
       - name: Install Capacitor
-        run: npm install
+        run: npm install --no-audit --no-fund
 
       - name: Add Android platform
         run: npx cap add android
 
       - name: Sync Android project
         run: npx cap sync android
+
+      - name: Install Japnish Paints launcher icon
+        run: |
+          cp -R android-res/* android/app/src/main/res/
 
       - name: Build debug APK
         working-directory: android
@@ -48,10 +63,10 @@ jobs:
       - name: Rename APK
         run: |
           mkdir -p release
-          cp android/app/build/outputs/apk/debug/app-debug.apk release/JapnishPaints-v68.0.0-debug.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk release/JapnishPaints-v68.0.2-debug.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: JapnishPaints-APK
-          path: release/JapnishPaints-v68.0.0-debug.apk
+          name: JapnishPaints-APK-v68.0.2
+          path: release/JapnishPaints-v68.0.2-debug.apk

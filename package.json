@@ -1,6 +1,6 @@
 {
   "name": "japnish-paints-app",
-  "version": "68.0.0",
+  "version": "68.0.2",
   "private": true,
   "scripts": {
     "build:android": "npx cap sync android && cd android && ./gradlew assembleDebug"
@@ -10,7 +10,6 @@
     "@capacitor/android": "^8.0.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "^8.0.0",
-    "typescript": "^5.0.0"
+    "@capacitor/cli": "^8.0.0"
   }
 }
