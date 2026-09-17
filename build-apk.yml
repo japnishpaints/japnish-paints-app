@@ -20,12 +20,11 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Force Java 21
+      - name: Verify Java 21
         shell: bash
         run: |
+          set -e
           echo "JAVA_HOME=$JAVA_HOME"
-          echo "$JAVA_HOME/bin" >> "$GITHUB_PATH"
-          echo "JAVA_HOME=$JAVA_HOME" >> "$GITHUB_ENV"
           "$JAVA_HOME/bin/java" -version
           "$JAVA_HOME/bin/javac" -version
 
@@ -82,9 +81,6 @@ jobs:
           p.write_text(s, encoding="utf-8")
           PY
 
-          echo "=== WWW FILES ==="
-          ls -la www
-
       - name: Install dependencies
         run: npm install
 
@@ -100,33 +96,40 @@ jobs:
             cp -R android-res/. android/app/src/main/res/
           fi
 
-          echo "=== Android resources ==="
-          find android/app/src/main/res -maxdepth 2 -type f | head -100
-
       - name: Sync Capacitor
         run: npx cap sync android
 
-      - name: Verify Gradle Java
+      - name: Force Gradle Java 21
         working-directory: android
         shell: bash
         run: |
+          set -e
+
           echo "JAVA_HOME=$JAVA_HOME"
           "$JAVA_HOME/bin/java" -version
           "$JAVA_HOME/bin/javac" -version
+
+          echo "org.gradle.java.home=$JAVA_HOME" >> gradle.properties
+
+          echo "=== GRADLE VERSION ==="
           ./gradlew --version
 
       - name: Build APK
         working-directory: android
         shell: bash
         run: |
-          export JAVA_HOME="${JAVA_HOME}"
-          export PATH="${JAVA_HOME}/bin:${PATH}"
+          set -e
 
-          echo "Building with:"
+          export JAVA_HOME="$JAVA_HOME"
+          export PATH="$JAVA_HOME/bin:$PATH"
+
+          echo "=== FINAL JAVA ==="
           "$JAVA_HOME/bin/java" -version
           "$JAVA_HOME/bin/javac" -version
 
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug \
+            --no-daemon \
+            -Dorg.gradle.java.home="$JAVA_HOME"
 
       - name: Prepare APK artifact
         shell: bash
