@@ -20,10 +20,14 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Verify Java
+      - name: Force Java 21
+        shell: bash
         run: |
-          java -version
-          javac -version
+          echo "JAVA_HOME=$JAVA_HOME"
+          echo "$JAVA_HOME/bin" >> "$GITHUB_PATH"
+          echo "JAVA_HOME=$JAVA_HOME" >> "$GITHUB_ENV"
+          "$JAVA_HOME/bin/java" -version
+          "$JAVA_HOME/bin/javac" -version
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -45,24 +49,20 @@ jobs:
           cp manifest.json www/
           cp app-update.js www/
 
-          # Dashboard logo
           if [ -f "japnish-dashboard-logo.png" ]; then
             cp japnish-dashboard-logo.png www/
           fi
 
-          # App logo
           if [ -f "japnish-logo.png" ]; then
             cp japnish-logo.png www/
           elif [ -f "japnish-dashboard-logo.png" ]; then
             cp japnish-dashboard-logo.png www/japnish-logo.png
           fi
 
-          # Brand CSS
           if [ -f "dashboard-brand-fix.css" ]; then
             cp dashboard-brand-fix.css www/
           fi
 
-          # Update URLs
           python3 - <<'PY'
           from pathlib import Path
 
@@ -106,9 +106,27 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync android
 
+      - name: Verify Gradle Java
+        working-directory: android
+        shell: bash
+        run: |
+          echo "JAVA_HOME=$JAVA_HOME"
+          "$JAVA_HOME/bin/java" -version
+          "$JAVA_HOME/bin/javac" -version
+          ./gradlew --version
+
       - name: Build APK
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
+        shell: bash
+        run: |
+          export JAVA_HOME="${JAVA_HOME}"
+          export PATH="${JAVA_HOME}/bin:${PATH}"
+
+          echo "Building with:"
+          "$JAVA_HOME/bin/java" -version
+          "$JAVA_HOME/bin/javac" -version
+
+          ./gradlew assembleDebug --no-daemon
 
       - name: Prepare APK artifact
         shell: bash
