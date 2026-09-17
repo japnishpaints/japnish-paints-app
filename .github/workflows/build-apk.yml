@@ -11,18 +11,75 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # ---------------------------------------------------------
+      # 1. CHECKOUT
+      # ---------------------------------------------------------
       - name: Checkout
         uses: actions/checkout@v4
 
+
+      # ---------------------------------------------------------
+      # 2. JAVA 21
+      # ---------------------------------------------------------
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          check-latest: true
+
+
+      # ---------------------------------------------------------
+      # 3. VERIFY JAVA
+      # ---------------------------------------------------------
+      - name: Verify Java 21
+        shell: bash
+        run: |
+          set -e
+
+          echo "===================================="
+          echo "JAVA HOME"
+          echo "===================================="
+          echo "$JAVA_HOME"
+
+          echo "===================================="
+          echo "JAVA VERSION"
+          echo "===================================="
+          "$JAVA_HOME/bin/java" -version
+
+          echo "===================================="
+          echo "JAVAC VERSION"
+          echo "===================================="
+          "$JAVA_HOME/bin/javac" -version
+
+          echo "===================================="
+          echo "JAVA COMPILER"
+          echo "===================================="
+          which java
+          which javac
+
+
+      # ---------------------------------------------------------
+      # 4. NODE 22
+      # ---------------------------------------------------------
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
 
+
+      # ---------------------------------------------------------
+      # 5. PREPARE WEB APP
+      # ---------------------------------------------------------
       - name: Prepare web app
         shell: bash
         run: |
           set -e
+
+          echo "===================================="
+          echo "PREPARING WWW"
+          echo "===================================="
 
           rm -rf www
           mkdir -p www
@@ -35,23 +92,28 @@ jobs:
           cp manifest.json www/
           cp app-update.js www/
 
-          # Branding assets
+          # Dashboard logo
           if [ -f "japnish-dashboard-logo.png" ]; then
             cp japnish-dashboard-logo.png www/
+            echo "Dashboard logo copied"
           fi
 
+          # App logo
           if [ -f "japnish-logo.png" ]; then
             cp japnish-logo.png www/
+            echo "App logo copied"
           elif [ -f "japnish-dashboard-logo.png" ]; then
             cp japnish-dashboard-logo.png www/japnish-logo.png
+            echo "Dashboard logo used as app logo fallback"
           fi
 
-          # Dashboard brand CSS
+          # Dashboard branding CSS
           if [ -f "dashboard-brand-fix.css" ]; then
             cp dashboard-brand-fix.css www/
+            echo "Dashboard brand CSS copied"
           fi
 
-          # Make API/update URLs absolute for Android WebView
+          # Make update URLs absolute
           python3 - <<'PY'
           from pathlib import Path
 
@@ -71,46 +133,211 @@ jobs:
           p.write_text(s, encoding="utf-8")
           PY
 
-          echo "=== WWW FILES ==="
-          ls -la www
+          echo "===================================="
+          echo "WWW CONTENT"
+          echo "===================================="
 
+          ls -lah www
+
+
+      # ---------------------------------------------------------
+      # 6. INSTALL NPM DEPENDENCIES
+      # ---------------------------------------------------------
       - name: Install dependencies
         run: npm install
 
+
+      # ---------------------------------------------------------
+      # 7. ADD ANDROID
+      # ---------------------------------------------------------
       - name: Add Android platform
         run: npx cap add android
 
-      - name: Copy Android app resources
+
+      # ---------------------------------------------------------
+      # 8. COPY ANDROID RESOURCES
+      # ---------------------------------------------------------
+      - name: Copy Android resources
         shell: bash
         run: |
           set -e
 
+          echo "===================================="
+          echo "ANDROID RESOURCES"
+          echo "===================================="
+
           if [ -d "android-res" ]; then
             cp -R android-res/. android/app/src/main/res/
+            echo "Android resources copied"
+          else
+            echo "android-res folder not found"
           fi
 
-          echo "=== Android resources ==="
-          find android/app/src/main/res -maxdepth 2 -type f | head -100
+          find android/app/src/main/res -maxdepth 2 -type f | head -150
 
+
+      # ---------------------------------------------------------
+      # 9. CAPACITOR SYNC
+      # ---------------------------------------------------------
       - name: Sync Capacitor
         run: npx cap sync android
 
+
+      # ---------------------------------------------------------
+      # 10. FORCE GRADLE JAVA 21
+      # ---------------------------------------------------------
+      - name: Configure Gradle Java 21
+        working-directory: android
+        shell: bash
+        run: |
+          set -e
+
+          echo "===================================="
+          echo "CONFIGURING GRADLE FOR JAVA 21"
+          echo "===================================="
+
+          echo "JAVA_HOME=$JAVA_HOME"
+
+          "$JAVA_HOME/bin/java" -version
+          "$JAVA_HOME/bin/javac" -version
+
+          # Force Gradle JVM
+          echo "org.gradle.java.home=$JAVA_HOME" >> gradle.properties
+
+          # Force Gradle toolchain discovery
+          echo "org.gradle.java.installations.paths=$JAVA_HOME" >> gradle.properties
+          echo "org.gradle.java.installations.auto-detect=false" >> gradle.properties
+          echo "org.gradle.java.installations.auto-download=false" >> gradle.properties
+
+          echo "===================================="
+          echo "GRADLE PROPERTIES"
+          echo "===================================="
+
+          cat gradle.properties
+
+
+      # ---------------------------------------------------------
+      # 11. CREATE JAVA 21 TOOLCHAIN INIT SCRIPT
+      # ---------------------------------------------------------
+      - name: Create Java 21 compiler configuration
+        working-directory: android
+        shell: bash
+        run: |
+          set -e
+
+          echo "===================================="
+          echo "CREATING JAVA 21 TOOLCHAIN"
+          echo "===================================="
+
+          cat > force-java21.gradle <<'EOF'
+          import org.gradle.api.tasks.compile.JavaCompile
+          import org.gradle.jvm.toolchain.JavaLanguageVersion
+
+          allprojects {
+              tasks.withType(JavaCompile).configureEach {
+                  javaCompiler = javaToolchains.compilerFor {
+                      languageVersion = JavaLanguageVersion.of(21)
+                  }
+              }
+          }
+          EOF
+
+          echo "===================================="
+          echo "TOOLCHAIN SCRIPT"
+          echo "===================================="
+
+          cat force-java21.gradle
+
+
+      # ---------------------------------------------------------
+      # 12. VERIFY GRADLE
+      # ---------------------------------------------------------
+      - name: Verify Gradle Java
+        working-directory: android
+        shell: bash
+        run: |
+          set -e
+
+          export JAVA_HOME="$JAVA_HOME"
+          export PATH="$JAVA_HOME/bin:$PATH"
+
+          echo "===================================="
+          echo "FINAL JAVA"
+          echo "===================================="
+
+          "$JAVA_HOME/bin/java" -version
+          "$JAVA_HOME/bin/javac" -version
+
+          echo "===================================="
+          echo "GRADLE VERSION"
+          echo "===================================="
+
+          ./gradlew \
+            -Dorg.gradle.java.home="$JAVA_HOME" \
+            --version
+
+
+      # ---------------------------------------------------------
+      # 13. BUILD APK
+      # ---------------------------------------------------------
       - name: Build APK
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon
+        shell: bash
+        run: |
+          set -e
 
+          export JAVA_HOME="$JAVA_HOME"
+          export PATH="$JAVA_HOME/bin:$PATH"
+
+          echo "===================================="
+          echo "BUILDING JAPNISH PAINTS APK"
+          echo "===================================="
+
+          echo "JAVA_HOME=$JAVA_HOME"
+
+          "$JAVA_HOME/bin/java" -version
+          "$JAVA_HOME/bin/javac" -version
+
+          echo "===================================="
+          echo "GRADLE BUILD"
+          echo "===================================="
+
+          ./gradlew \
+            -I force-java21.gradle \
+            -Dorg.gradle.java.home="$JAVA_HOME" \
+            -Dorg.gradle.java.installations.paths="$JAVA_HOME" \
+            assembleDebug \
+            --no-daemon \
+            --stacktrace
+
+
+      # ---------------------------------------------------------
+      # 14. PREPARE APK
+      # ---------------------------------------------------------
       - name: Prepare APK artifact
         shell: bash
         run: |
           set -e
 
+          echo "===================================="
+          echo "PREPARING APK"
+          echo "===================================="
+
           mkdir -p release
 
           cp android/app/build/outputs/apk/debug/app-debug.apk \
-             release/JapnishPaints-v68.0.3-debug.apk
+            release/JapnishPaints-v68.0.3-debug.apk
+
+          echo "===================================="
+          echo "APK CREATED"
+          echo "===================================="
 
           ls -lh release/
 
+
+      # ---------------------------------------------------------
+      # 15. UPLOAD APK
+      # ---------------------------------------------------------
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
