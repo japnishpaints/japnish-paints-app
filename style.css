@@ -917,3 +917,74 @@ body{overflow-x:hidden!important;}
 .role-pills button.selected{background:var(--jp-final-green)!important;border-color:var(--jp-final-green)!important;color:#fff!important;}
 /* Keep interior/exterior image artwork as supplied; only its surrounding frame follows the locked palette. */
 .paint-slider,.home-admin-slider-top,.login-main-slider{border-color:var(--jp-final-line)!important;}
+/* =========================================================
+   JAPNISH PAINTS — FINAL SLIDER FIX
+   Do not remove existing styles
+   ========================================================= */
+
+/* Login / Welcome slider */
+.login-admin-slider,
+.login-main-slider {
+  width: 100% !important;
+  overflow: hidden !important;
+  position: relative !important;
+  background: #fff !important;
+}
+
+.login-slide-track {
+  display: flex !important;
+  width: 100% !important;
+  height: 100% !important;
+  transition: transform .45s ease !important;
+  touch-action: pan-y !important;
+  user-select: none !important;
+}
+
+.login-slide {
+  flex: 0 0 100% !important;
+  min-width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  background: #fff !important;
+}
+
+.login-slide img {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  user-select: none !important;
+  -webkit-user-drag: none !important;
+}
+
+/* Arrows */
+.login-admin-slider > button,
+.login-main-slider > button {
+  z-index: 10 !important;
+  position: absolute !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+/* Dots */
+.login-slide-dots {
+  z-index: 11 !important;
+  pointer-events: none !important;
+}
+
+/* Mobile */
+@media (max-width:600px) {
+  .login-admin-slider {
+    width: calc(100% - 16px) !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+
+  .login-slide img {
+    object-fit: contain !important;
+  }
+}
