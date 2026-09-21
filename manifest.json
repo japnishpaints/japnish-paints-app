@@ -1,11 +1,17 @@
 {
-  "name": "Japnish Paints — Premium Partner App",
+  "name": "Japnish Paints",
   "short_name": "Japnish Paints",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "./index.html",
   "display": "standalone",
+  "background_color": "#E8F5EF",
+  "theme_color": "#0B4D91",
   "orientation": "portrait",
-  "background_color": "#0b1730",
-  "theme_color": "#0b1730",
-  "icons": []
+  "icons": [
+    {
+      "src": "japnish-logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }

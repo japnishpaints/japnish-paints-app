@@ -180,7 +180,7 @@ function roleCanRedeem(){
      can("redeem") || can("coupon_redeem") || can("qr_redeem"));
 }
 function welcomeView(){
-  A.innerHTML=`<div class="app welcome-app"><div class="welcome-page-shell"><section class="welcome-hero"><div class="welcome-brand"><img src="${esc((state.branding||{}).dashboard_logo_url||(state.branding||{}).app_logo_url||"japnish-logo.png")}" alt="${esc((state.branding||{}).company_name||"Japnish Paints")}"></div><div class="welcome-tagline">${esc((state.branding||{}).welcome_text||"COLOURS THAT BUILD A BRIGHTER TOMORROW")}</div><div class="welcome-main-slider login-admin-slider login-main-slider" id="welcomeSlider"><div class="login-slide-track" id="welcomeSlideTrack"><div class="login-slide-loading">Loading brand highlights…</div></div><button type="button" onclick="welcomeSliderPrev()" aria-label="Previous">‹</button><button type="button" onclick="welcomeSliderNext()" aria-label="Next">›</button><div class="login-slide-dots" id="welcomeSlideDots"></div></div><div class="welcome-benefits"><div><i>🎁</i><b>Earn<br>Points</b></div><div><i>★</i><b>Get<br>Rewards</b></div><div><i>👥</i><b>Grow<br>Together</b></div></div><div class="welcome-hint">${esc((state.branding||{}).announcement||((state.branding||{}).company_name?"Welcome to "+(state.branding||{}).company_name:"Welcome to Japnish Paints"))}</div><div class="welcome-progress"><span></span></div></section><footer class="welcome-footer">${esc((state.branding||{}).company_name||"Japnish Paints")}&nbsp; | &nbsp;FOR A COLORFUL TOMORROW</footer></div></div>`;
+  A.innerHTML=`<div class="app welcome-app"><div class="welcome-page-shell"><section class="welcome-hero"><div class="welcome-brand brand-wordmark" aria-label="JAPNISH PAINTS">JAPNISH PAINTS</div><div class="welcome-tagline">${esc((state.branding||{}).welcome_text||"COLOURS THAT BUILD A BRIGHTER TOMORROW")}</div><div class="welcome-main-slider login-admin-slider login-main-slider" id="welcomeSlider"><div class="login-slide-track" id="welcomeSlideTrack"><div class="login-slide-loading">Loading brand highlights…</div></div><button type="button" onclick="welcomeSliderPrev()" aria-label="Previous">‹</button><button type="button" onclick="welcomeSliderNext()" aria-label="Next">›</button><div class="login-slide-dots" id="welcomeSlideDots"></div></div><div class="welcome-benefits"><div><i>🎁</i><b>Earn<br>Points</b></div><div><i>★</i><b>Get<br>Rewards</b></div><div><i>👥</i><b>Grow<br>Together</b></div></div><div class="welcome-hint">${esc((state.branding||{}).announcement||((state.branding||{}).company_name?"Welcome to "+(state.branding||{}).company_name:"Welcome to Japnish Paints"))}</div><div class="welcome-progress"><span></span></div></section><footer class="welcome-footer">${esc((state.branding||{}).company_name||"Japnish Paints")}&nbsp; | &nbsp;FOR A COLORFUL TOMORROW</footer></div></div>`;
   loadWelcomeSliders();
 }
 let welcomeSlides=[],welcomeSlideIndex=0,welcomeSlideTimer=null;
@@ -196,7 +196,7 @@ function loginView(msg=""){
     <div class="login-page-shell">
       <section class="login-hero">
         <div class="login-brand-row">
-          <div class="login-logo-box login-logo-single"><img src="${esc((state.branding||{}).login_logo_url||(state.branding||{}).app_logo_url||"japnish-logo.png")}" alt="${esc((state.branding||{}).company_name||"Japnish Paints")}"></div>
+          <div class="login-logo-box login-logo-single brand-wordmark" aria-label="JAPNISH PAINTS">JAPNISH PAINTS</div>
           <div class="login-tagline-only">${esc(b.brand_tagline||"COLOURS THAT BUILD A BRIGHTER TOMORROW")}</div>
         </div>
         <div class="login-admin-slider login-main-slider" id="loginAdminSlider">
@@ -294,7 +294,7 @@ function header(){
   return `<header class="topbar jp-flat-header">
     <div class="brand-wrap">
       <button class="jp-menu-btn" onclick="openMenu()" aria-label="Menu">${jpIcon('menu')}</button>
-      <div class="brand-logo-shell brand-logo-single"><img class="brand-logo" src="${esc(logo)}" alt="${esc(company)}"></div>
+      <div class="brand-logo-shell brand-logo-single brand-wordmark" aria-label="JAPNISH PAINTS">JAPNISH PAINTS</div>
     </div>
     <div class="header-actions"><button class="icon-btn jp-flat-icon" onclick="notifications()" aria-label="Notifications">${jpIcon('bell')}<i></i></button><button class="avatar jp-avatar-button" onclick="render('profile')" aria-label="Profile">${profileAvatar('sm')}</button></div>
   </header>`;
@@ -324,7 +324,7 @@ function menuDrawer(){
   const role=names[state.role]||'Partner';
   const p=getProfilePhoto();
   return `<div id="jpMenuBackdrop" class="jp-menu-backdrop" onclick="closeMenu()"></div><aside id="jpMenuDrawer" class="jp-menu-drawer" aria-label="App menu">
-    <div class="jp-menu-top"><div class="jp-menu-brand"><img src="${esc((state.branding||{}).dashboard_logo_url||(state.branding||{}).app_logo_url||"japnish-logo.png")}" alt="${esc((state.branding||{}).company_name||"Japnish Paints")}"></div><button onclick="closeMenu()" aria-label="Close">${jpIcon('close')}</button></div>
+    <div class="jp-menu-top"><div class="jp-menu-brand brand-wordmark" aria-label="JAPNISH PAINTS">JAPNISH PAINTS</div><button onclick="closeMenu()" aria-label="Close">${jpIcon('close')}</button></div>
     <div class="jp-menu-profile">${profileAvatar('lg')}<div><b>${esc(state.user?.username||state.user?.name||role)}</b><small>${esc(role)} <span>• Active</span></small></div><button onclick="render('profile');closeMenu()">›</button></div>
     <label class="jp-photo-add">${jpIcon('camera')}<span>${p?'Change Profile Photo':'Add Profile Photo'}</span><input type="file" accept="image/*" onchange="handleProfilePhoto(this)"></label>
     ${p?`<button class="jp-photo-remove" onclick="removeProfilePhoto()">Remove Profile Photo</button>`:''}
@@ -385,7 +385,7 @@ async function home(){
   if(!slides.length)slides=[];
   document.querySelector('.content').innerHTML=`
     <section class="intl-home-head jp-home-flat-head">
-      <div class="home-head-left"><button class="home-menu jp-menu-btn" onclick="openMenu()" aria-label="Menu">${jpIcon('menu')}</button><div class="home-logo home-logo-single"><img src="${esc((state.branding||{}).dashboard_logo_url||(state.branding||{}).app_logo_url||"japnish-logo.png")}" alt="${esc((state.branding||{}).company_name||"Japnish Paints")}"></div></div>
+      <div class="home-head-left"><button class="home-menu jp-menu-btn" onclick="openMenu()" aria-label="Menu">${jpIcon('menu')}</button><div class="home-logo home-logo-single brand-wordmark" aria-label="JAPNISH PAINTS">JAPNISH PAINTS</div></div>
       <div class="home-head-right"><button class="home-bell jp-flat-icon" onclick="notifications()" aria-label="Notifications">${jpIcon('bell')}<i></i></button><button class="home-user jp-avatar-button" onclick="render('profile')" aria-label="Profile">${profileAvatar('sm')}</button><span>Hello,<br><b>${esc(role)}</b></span><button class="home-down" onclick="openMenu()" aria-label="Open menu">⌄</button></div>
     </section>
     <section class="home-admin-slider home-admin-slider-top" id="homeAdminSlider"><div class="home-slider-track">${slides.map((s,i)=>`<div class="home-slide"><img src="${esc(s.image_url)}" data-candidates='${esc(JSON.stringify(s.image_candidates||[]))}' data-idx="0" alt="Japnish Paints promotional banner" loading="${i?'lazy':'eager'}" onerror="const a=JSON.parse(this.dataset.candidates||'[]');let n=Number(this.dataset.idx||0)+1;this.dataset.idx=n;if(n<a.length)this.src=a[n];else{this.style.display='none';this.parentElement.classList.add('slider-image-missing')}"></div>`).join('')}</div><button class="hs-prev" onclick="homeSliderPrev()" aria-label="Previous banner">‹</button><button class="hs-next" onclick="homeSliderNext()" aria-label="Next banner">›</button></section>
@@ -410,7 +410,7 @@ async function home(){
       <button onclick="giftNetwork()"><span class="home-3d-icon people">👥</span><small>Refer Helper</small></button>
     </section>
     <section class="dashboard-all-functions">
-      <div class="dashboard-functions-title"><span>ALL SERVICES</span><h2>Everything in One Place</h2></div>
+      <div class="dashboard-functions-title"><span>ALL SERVICES</span><h2>Everything in One Place</h2><button class="dashboard-view-all" type="button" onclick="servicesView()">View All →</button></div>
       <div class="paint-action-grid dashboard-function-grid">
         ${action('👤','Profile','Account details',"render('profile')")}
         ${action('⬇️','Withdraw','Request payment',"render('wallet')")}
@@ -746,6 +746,33 @@ async function stopScan(){
   }
 }
 
+
+function servicesView(){
+  state.screen='services';
+  const redeem=roleCanRedeem();
+  const items=[
+    ['👤','Profile','Account details',"render('profile')"],
+    ['💰','Withdraw','Request payment',"render('wallet')"],
+    ...(redeem?[['▦','Scan QR','Scan & redeem',"render('redeem')"]]:[]),
+    ...(redeem?[['🎁','Redeem','Coupon reward',"render('redeem')"]]:[]),
+    ['📄','Withdraw History','All requests',"historyView('withdrawals')"],
+    ['📚','Transaction History','Wallet activity',"historyView('transactions')"],
+    ...(redeem?[['🧾','Redeem History','All redeemed',"historyView('redeems')"]]:[]),
+    ['🏦','Add Bank','Bank details',"bankView()"],
+    ['🔒','Change Password','Security',"passwordView()"],
+    ['🎁','Gift Network','Rewards scheme',"giftNetwork()"],
+    ['📊','My Gift Report','Gift points',"giftReport()"],
+    ['🪙','POINT History','Live points',"pointHistory()"],
+    ['🔔','Notifications','Admin updates',"notifications()"],
+    ['🛟','Support','Get help',"supportView()"],
+    ['🚪','Logout','Sign out securely',"logout()"]
+  ];
+  const head=header();
+  const bottom=nav();
+  const cards=items.map(x=>`<button type="button" class="service-tile" onclick="${x[3]}"><span class="service-icon">${x[0]}</span><span class="service-copy"><b>${x[1]}</b><small>${x[2]}</small></span><span class="service-arrow">›</span></button>`).join('');
+  A.innerHTML=`<div class="app services-page">${head}<main class="content"><section class="page-card"><div class="page-head"><button type="button" onclick="render('home')">‹</button><div><span>Services</span><h1>All Services</h1></div></div><div class="services-page-hero"><span class="eyebrow">ALL SERVICES</span><h2>Everything in One Place</h2><p>Simple, fast and secure access to your Japnish Paints services.</p></div><div class="services-page-grid">${cards}</div></section></main>${bottom}${menuDrawer()}</div>`;
+}
+
 async function productsView(){
   let d;
   let errorMessage='';
@@ -789,7 +816,7 @@ function logout(){stopScan();localStorage.removeItem("jp_token");state={role:"",
   // Guest flow: splash first, then branded Home/Welcome for 5 seconds, then Login.
   setTimeout(()=>{hideSplash(); welcomeView(); setTimeout(()=>{clearInterval(welcomeSlideTimer); loginView();},5000);},1200);
 })();
-window.openMenu=openMenu;window.closeMenu=closeMenu;window.handleProfilePhoto=handleProfilePhoto;window.removeProfilePhoto=removeProfilePhoto;window.showLogin=showLogin;window.doLogin=doLogin;window.render=render;window.jpSlideNext=jpSlideNext;window.jpSlidePrev=jpSlidePrev;window.couponEntry=couponEntry;window.redeem=redeem;window.startRedeem=startRedeem;window.submitRedeem=submitRedeem;window.stopScan=stopScan;window.notifications=notifications;window.logout=logout;window.historyView=historyView;window.giftReport=giftReport;window.pointHistory=pointHistory;window.giftNetwork=giftNetwork;window.claimGift=claimGift;window.bankView=bankView;window.passwordView=passwordView;window.submitWithdraw=submitWithdraw;window.saveBank=saveBank;window.savePassword=savePassword;window.productsView=productsView;
+window.openMenu=openMenu;window.closeMenu=closeMenu;window.handleProfilePhoto=handleProfilePhoto;window.removeProfilePhoto=removeProfilePhoto;window.showLogin=showLogin;window.doLogin=doLogin;window.render=render;window.jpSlideNext=jpSlideNext;window.jpSlidePrev=jpSlidePrev;window.couponEntry=couponEntry;window.redeem=redeem;window.startRedeem=startRedeem;window.submitRedeem=submitRedeem;window.stopScan=stopScan;window.notifications=notifications;window.logout=logout;window.historyView=historyView;window.giftReport=giftReport;window.pointHistory=pointHistory;window.giftNetwork=giftNetwork;window.claimGift=claimGift;window.bankView=bankView;window.passwordView=passwordView;window.submitWithdraw=submitWithdraw;window.saveBank=saveBank;window.savePassword=savePassword;window.productsView=productsView;window.servicesView=servicesView;
 /* =========================================================
    JAPNISH PAINTS — LOGIN/WELCOME SLIDER TOUCH SWIPE
    Add at the very end of app.js

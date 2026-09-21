@@ -846,145 +846,56 @@ input:focus,select:focus,textarea:focus{border-color:var(--jp-final-green)!impor
   .jp-menu-brand{width:180px!important;height:56px!important}
 }
 
-/* FINAL OVERRIDE — GREEN / BLUE / WHITE LOCK
-   Visual CSS only. Do not change JS, APIs, login, wallet, withdrawal,
-   bank, Products or Coupon/Redeem/Scan functionality. Interior/Exterior
-   artwork and supplied J logo are intentionally not replaced here. */
-:root{
-  --jp-final-green:#129B63;
-  --jp-final-blue:#0B4D91;
-  --jp-final-white:#FFFFFF;
-  --jp-final-light:#E8F5EF;
-  --jp-final-line:#D5E8E0;
-  --jp-final-ink:#103B67;
-}
-html,body{background:var(--jp-final-light)!important;color:var(--jp-final-ink)!important;}
-body{overflow-x:hidden!important;}
-.app,.home-app,.welcome-app,.login-app,.login-page-shell,.auth-app{
-  background:linear-gradient(180deg,#f8fffc 0%,#e8f5ef 100%)!important;
-}
-.topbar,.jp-flat-header,.intl-home-head,.jp-home-flat-head,.premium-header{
-  background:rgba(255,255,255,.98)!important;
-  border-color:var(--jp-final-line)!important;
-  box-shadow:0 6px 20px rgba(11,77,145,.08)!important;
-}
-.brand,.home-brand strong,.login-brand-name{color:var(--jp-final-blue)!important;}
-.sub,.home-brand small{color:#61768c!important;}
-.jp-menu-btn,.home-menu,.home-bell,.home-user,.home-down,.jp-flat-icon,.jp-avatar-button,
-.notify-round,.user-round,.icon-btn,.avatar{
-  background:#fff!important;color:var(--jp-final-blue)!important;border-color:var(--jp-final-line)!important;
-}
-.home-admin-slider-top,.login-admin-slider,.hero-banner{
-  background:linear-gradient(135deg,var(--jp-final-green),var(--jp-final-blue))!important;
-  border-color:#fff!important;
-}
-.home-welcome-card,.home-wallet-row button,.home-points-row button,.home-feature-grid button,
-.paint-action,.page-card,.card,.next-reward-card,.profile-identity-clean,
-.profile-detail-grid>div,.history-row,.reward-card,.report-stats>div{
-  background:#fff!important;border-color:var(--jp-final-line)!important;
-  box-shadow:0 7px 18px rgba(11,77,145,.07)!important;
-}
-.home-welcome-card{border-top:3px solid var(--jp-final-green)!important;}
-.home-welcome-kicker,.dashboard-functions-title span,.section-head span{color:var(--jp-final-green)!important;}
-.home-welcome-card h2,.dashboard-functions-title h2,.section-head h2,
-.next-reward-card h2,.reward-card h3{color:var(--jp-final-blue)!important;}
-.home-active-pill{background:#e2f6ec!important;color:#128653!important;}
-.home-3d-icon{background:#e9f2ff!important;color:var(--jp-final-blue)!important;border-color:#cfe1f3!important;}
-.home-points-row .gift{color:var(--jp-final-red)!important;background:#fff0f2!important;}
-.home-points-row .progress{color:var(--jp-final-green)!important;background:#eaf8f0!important;}
-.home-points-row .people{color:var(--jp-final-blue)!important;background:#e9f2ff!important;}
-.home-points-row .qr{color:var(--jp-final-blue)!important;background:#e9f2ff!important;}
-.dashboard-function-grid .paint-action:nth-child(4n+1) .paint-icon,
-.home-more-grid button:nth-child(4n+1) .paint-icon{background:#e9f2ff!important;color:var(--jp-final-blue)!important;}
-.dashboard-function-grid .paint-action:nth-child(4n+2) .paint-icon,
-.home-more-grid button:nth-child(4n+2) .paint-icon{background:#e4f7ed!important;color:var(--jp-final-green)!important;}
-.dashboard-function-grid .paint-action:nth-child(4n+3) .paint-icon,
-.home-more-grid button:nth-child(4n+3) .paint-icon{background:#fff7dc!important;color:#c28b08!important;}
-.dashboard-function-grid .paint-action:nth-child(4n) .paint-icon,
-.home-more-grid button:nth-child(4n) .paint-icon{background:#fff0f2!important;color:var(--jp-final-red)!important;}
-.modern-nav,.app-universal-nav,.home-modern-nav,.bottom-nav{
-  background:rgba(255,255,255,.98)!important;border-color:var(--jp-final-line)!important;
-  box-shadow:0 -5px 18px rgba(11,77,145,.09)!important;
-}
-.app-universal-nav button,.bottom-nav button{color:#657d95!important;background:transparent!important;}
-.app-universal-nav button.active,.home-scan-nav,.bottom-nav button.active{
-  background:var(--jp-final-green)!important;color:#fff!important;
-  box-shadow:0 6px 15px rgba(18,155,99,.20)!important;
-}
-.login-hero{background:linear-gradient(145deg,var(--jp-final-blue),#0d65b5 52%,var(--jp-final-green))!important;border-bottom:4px solid var(--jp-final-green)!important;}
-.login-card{background:#fff!important;border-color:var(--jp-final-line)!important;}
-.login-main-btn,.btn-primary,.primary-btn,.reward-arrow{background:linear-gradient(135deg,var(--jp-final-green),#0d7d50)!important;color:#fff!important;}
-.role-pills button.selected{background:var(--jp-final-green)!important;border-color:var(--jp-final-green)!important;color:#fff!important;}
-/* Keep interior/exterior image artwork as supplied; only its surrounding frame follows the locked palette. */
-.paint-slider,.home-admin-slider-top,.login-main-slider{border-color:var(--jp-final-line)!important;}
+
 /* =========================================================
-   JAPNISH PAINTS — FINAL SLIDER FIX
-   Do not remove existing styles
+   JAPNISH PAINTS FINAL UI PASS — SERVICES + SPLASH CLEANUP
+   UI-only. Existing APIs/business functions remain unchanged.
    ========================================================= */
 
-/* Login / Welcome slider */
-.login-admin-slider,
-.login-main-slider {
-  width: 100% !important;
-  overflow: hidden !important;
-  position: relative !important;
-  background: #fff !important;
+/* Remove duplicate standalone logo over the supplied splash artwork. */
+.jp-splash-logo-shell{display:none!important}
+
+/* Dedicated All Services screen — two-column reference layout. */
+.services-page{padding-bottom:110px!important}
+.services-page .page-head{margin-bottom:14px!important}
+.services-page-hero{padding:6px 4px 14px!important}
+.services-page-hero .eyebrow{display:block;font-size:10px;letter-spacing:2px;font-weight:900;color:var(--jp-final-green);margin-bottom:3px}
+.services-page-hero h2{margin:0;color:var(--jp-final-blue);font-size:24px;line-height:1.08}
+.services-page-hero p{margin:5px 0 0;color:#607893;font-size:12px}
+.services-page-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+.services-page-grid .service-tile{display:flex!important;align-items:center!important;gap:10px!important;min-height:72px!important;padding:10px!important;border:1px solid #d9e8f3!important;border-radius:19px!important;background:linear-gradient(145deg,#fff,#f4f9ff)!important;box-shadow:0 7px 18px rgba(11,77,145,.09),inset 2px 2px 0 #fff!important;color:var(--jp-final-ink)!important;text-align:left!important}
+.services-page-grid .service-tile:active{transform:scale(.98)}
+.services-page-grid .service-icon{width:44px!important;height:44px!important;flex:0 0 44px!important;display:grid!important;place-items:center!important;border-radius:14px!important;font-size:22px!important;background:#eaf3ff!important;color:var(--jp-final-blue)!important;box-shadow:inset 2px 2px 5px #fff,0 6px 13px rgba(20,101,176,.13)!important}
+.services-page-grid .service-tile:nth-child(4n+2) .service-icon{background:#e7f8ef!important;color:#129b63!important}
+.services-page-grid .service-tile:nth-child(4n+3) .service-icon{background:#fff6df!important;color:#c58a00!important}
+.services-page-grid .service-tile:nth-child(4n) .service-icon{background:#fff0f2!important;color:#ed1b2f!important}
+.services-page-grid .service-copy{min-width:0;flex:1}
+.services-page-grid .service-copy b{display:block;font-size:12px;line-height:1.15;color:#103b67!important}
+.services-page-grid .service-copy small{display:block;margin-top:3px;font-size:9px;line-height:1.2;color:#6a8097!important}
+.services-page-grid .service-arrow{font-size:20px;color:#0b4d91!important;line-height:1}
+.dashboard-functions-title{position:relative!important}
+.dashboard-view-all{position:absolute!important;right:2px!important;top:8px!important;background:transparent!important;color:var(--jp-final-blue)!important;font-weight:900!important;font-size:11px!important;padding:4px!important}
+@media(max-width:380px){
+  .services-page-grid{gap:8px!important}
+  .services-page-grid .service-tile{padding:8px!important;gap:7px!important}
+  .services-page-grid .service-icon{width:39px!important;height:39px!important;flex-basis:39px!important;font-size:19px!important;border-radius:12px!important}
+  .services-page-grid .service-copy b{font-size:11px!important}
+  .services-page-grid .service-copy small{font-size:8px!important}
 }
 
-.login-slide-track {
-  display: flex !important;
-  width: 100% !important;
-  height: 100% !important;
-  transition: transform .45s ease !important;
-  touch-action: pan-y !important;
-  user-select: none !important;
+/* Final approved header branding: text-only wordmark, no standalone J icon. */
+.brand-wordmark{display:flex!important;align-items:center!important;justify-content:center!important;color:#0B4D91!important;font-weight:950!important;letter-spacing:.8px!important;line-height:1!important;text-transform:uppercase!important;white-space:nowrap!important;text-shadow:0 1px 0 #fff!important}
+.brand-wordmark::first-letter{color:#0B4D91!important}
+.brand-logo-shell.brand-wordmark{width:auto!important;min-width:0!important;height:42px!important;background:transparent!important;border:0!important;border-radius:0!important;overflow:visible!important;padding:0 2px!important;font-size:17px!important}
+.home-logo.brand-wordmark{width:auto!important;min-width:0!important;height:42px!important;background:transparent!important;font-size:17px!important}
+.jp-menu-brand.brand-wordmark{width:auto!important;min-width:0!important;height:42px!important;background:transparent!important;font-size:18px!important}
+.welcome-brand.brand-wordmark{font-size:28px!important;letter-spacing:1.2px!important}
+.login-logo-box.brand-wordmark{font-size:25px!important;letter-spacing:1px!important;width:auto!important;height:48px!important;background:transparent!important;border:0!important;border-radius:0!important}
+@media(max-width:430px){
+  .brand-logo-shell.brand-wordmark,.home-logo.brand-wordmark{font-size:15px!important}
+  .jp-menu-brand.brand-wordmark{font-size:17px!important}
+  .welcome-brand.brand-wordmark{font-size:24px!important}
+  .login-logo-box.brand-wordmark{font-size:21px!important}
 }
-
-.login-slide {
-  flex: 0 0 100% !important;
-  min-width: 100% !important;
-  height: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  overflow: hidden !important;
-  background: #fff !important;
-}
-
-.login-slide img {
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
-  object-fit: contain !important;
-  object-position: center !important;
-  user-select: none !important;
-  -webkit-user-drag: none !important;
-}
-
-/* Arrows */
-.login-admin-slider > button,
-.login-main-slider > button {
-  z-index: 10 !important;
-  position: absolute !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-}
-
-/* Dots */
-.login-slide-dots {
-  z-index: 11 !important;
-  pointer-events: none !important;
-}
-
-/* Mobile */
-@media (max-width:600px) {
-  .login-admin-slider {
-    width: calc(100% - 16px) !important;
-    margin-left: 8px !important;
-    margin-right: 8px !important;
-  }
-
-  .login-slide img {
-    object-fit: contain !important;
-  }
-}
+/* Prevent old logo-image override rules from affecting the text-only header. */
+.brand-logo-shell.brand-wordmark img,.home-logo.brand-wordmark img,.jp-menu-brand.brand-wordmark img,.welcome-brand.brand-wordmark img,.login-logo-box.brand-wordmark img{display:none!important}
