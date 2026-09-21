@@ -790,3 +790,99 @@ function logout(){stopScan();localStorage.removeItem("jp_token");state={role:"",
   setTimeout(()=>{hideSplash(); welcomeView(); setTimeout(()=>{clearInterval(welcomeSlideTimer); loginView();},5000);},1200);
 })();
 window.openMenu=openMenu;window.closeMenu=closeMenu;window.handleProfilePhoto=handleProfilePhoto;window.removeProfilePhoto=removeProfilePhoto;window.showLogin=showLogin;window.doLogin=doLogin;window.render=render;window.jpSlideNext=jpSlideNext;window.jpSlidePrev=jpSlidePrev;window.couponEntry=couponEntry;window.redeem=redeem;window.startRedeem=startRedeem;window.submitRedeem=submitRedeem;window.stopScan=stopScan;window.notifications=notifications;window.logout=logout;window.historyView=historyView;window.giftReport=giftReport;window.pointHistory=pointHistory;window.giftNetwork=giftNetwork;window.claimGift=claimGift;window.bankView=bankView;window.passwordView=passwordView;window.submitWithdraw=submitWithdraw;window.saveBank=saveBank;window.savePassword=savePassword;window.productsView=productsView;
+/* =========================================================
+   JAPNISH PAINTS — LOGIN/WELCOME SLIDER TOUCH SWIPE
+   Add at the very end of app.js
+   ========================================================= */
+
+(function () {
+  let loginTouchStartX = 0;
+  let loginTouchStartY = 0;
+
+  let welcomeTouchStartX = 0;
+  let welcomeTouchStartY = 0;
+
+  function bindLoginSliderSwipe() {
+    const slider = document.getElementById("loginAdminSlider");
+    if (!slider || slider.dataset.swipeBound === "1") return;
+
+    slider.dataset.swipeBound = "1";
+
+    slider.addEventListener("touchstart", function (e) {
+      if (!e.touches || !e.touches.length) return;
+
+      loginTouchStartX = e.touches[0].clientX;
+      loginTouchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    slider.addEventListener("touchend", function (e) {
+      if (!e.changedTouches || !e.changedTouches.length) return;
+
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+
+      const dx = endX - loginTouchStartX;
+      const dy = endY - loginTouchStartY;
+
+      /* Ignore vertical scrolling */
+      if (Math.abs(dy) > Math.abs(dx)) return;
+
+      /* Minimum swipe distance */
+      if (Math.abs(dx) < 45) return;
+
+      if (dx < 0) {
+        loginSliderNext();
+      } else {
+        loginSliderPrev();
+      }
+    }, { passive: true });
+  }
+
+  function bindWelcomeSliderSwipe() {
+    const slider = document.getElementById("welcomeSlider");
+    if (!slider || slider.dataset.swipeBound === "1") return;
+
+    slider.dataset.swipeBound = "1";
+
+    slider.addEventListener("touchstart", function (e) {
+      if (!e.touches || !e.touches.length) return;
+
+      welcomeTouchStartX = e.touches[0].clientX;
+      welcomeTouchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    slider.addEventListener("touchend", function (e) {
+      if (!e.changedTouches || !e.changedTouches.length) return;
+
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+
+      const dx = endX - welcomeTouchStartX;
+      const dy = endY - welcomeTouchStartY;
+
+      /* Ignore vertical scrolling */
+      if (Math.abs(dy) > Math.abs(dx)) return;
+
+      /* Minimum swipe distance */
+      if (Math.abs(dx) < 45) return;
+
+      if (dx < 0) {
+        welcomeSliderNext();
+      } else {
+        welcomeSliderPrev();
+      }
+    }, { passive: true });
+  }
+
+  function bindAllJapnishSliders() {
+    bindLoginSliderSwipe();
+    bindWelcomeSliderSwipe();
+  }
+
+  /* Initial load */
+  setTimeout(bindAllJapnishSliders, 300);
+
+  /* Login/welcome screens recreate their HTML,
+     so check again after rendering/loading. */
+  setInterval(bindAllJapnishSliders, 1000);
+})();
