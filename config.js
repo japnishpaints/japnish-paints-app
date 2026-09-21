@@ -1,7 +1,11 @@
 window.JP_CONFIG = {
   API_BASE_URL: "https://japnishpaints.store/api",
   DATA_API_BASE_URL: "https://japnishpaints.store/mobile/mobile-api.php",
-  APP_VERSION: "68.0.3",
+
+  /* FINAL APK VERSION */
+  APP_VERSION: "70.0.0",
+
+  /* AUTO UPDATE */
   UPDATE_VERSION_URL: "https://japnishpaints.store/mobile/app-version.php",
   APK_DOWNLOAD_URL: "https://japnishpaints.store/mobile/app/JapnishPaints.apk",
 
